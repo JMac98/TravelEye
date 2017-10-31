@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<!--
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+-->
+<html>
+    <head>
+        <title>TODO supply a title</title>
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+        
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    </head>
+    
+    <body>
+        <div id="times"></div>
+        <button onclick="get_times()">Click</button>
+        
+        <script>
+            function get_times(){
+                $.ajax({
+                    type: 'GET',
+                    url: 'https://api.tfl.gov.uk/Line/DLR/Arrivals/940GZZDLPRE?direction=outbound&app_id=461641d9&app_key=da2878c05fb690b51e78be69a0fc691f',
+                    dataType: 'json',
+                    success: function(data){
+                        $("#times").html("");
+                        $.each(data, function(key,value){
+                            var line = value.stationName;
+                            var destination = value.destinationName;
+                            var time = value.timeToStation;
+                            $("#times").append(line+" -> "+destination+" "+time+"<br>");
+                    });
+                }
+                });
+            }
+        </script>
+           
+    </body>
+</html>
