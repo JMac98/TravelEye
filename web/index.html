@@ -6,35 +6,43 @@ and open the template in the editor.
 -->
 <html>
     <head>
-        <title>TODO supply a title</title>
+        <title>TravelEye</title>
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
         
+        <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+        <link rel="stylesheet" href="https://code.getmdl.io/1.3.0/material.indigo-pink.min.css">
+        <script defer src="https://code.getmdl.io/1.3.0/material.min.js"></script>
+
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
     </head>
-    
+
     <body>
         <div id="times"></div>
-        <button onclick="get_times()">Click</button>
-        
+        <!-- Raised button with ripple -->
+        <button class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect" onclick="get_times()">
+            Button
+        </button>
+
         <script>
-            function get_times(){
+            function get_times() {
                 $.ajax({
                     type: 'GET',
                     url: 'https://api.tfl.gov.uk/Line/DLR/Arrivals/940GZZDLPRE?direction=outbound&app_id=461641d9&app_key=da2878c05fb690b51e78be69a0fc691f',
                     dataType: 'json',
-                    success: function(data){
+                    success: function (data) {
                         $("#times").html("");
-                        $.each(data, function(key,value){
+                        $.each(data, function (key, value) {
                             var line = value.stationName;
                             var destination = value.destinationName;
                             var time = value.timeToStation;
-                            $("#times").append(line+" -> "+destination+" "+time+"<br>");
-                    });
-                }
+                            $("#times").append(line + " -> " + destination + " " + time + "<br>");
+                        });
+                    }
                 });
             }
         </script>
-           
+
     </body>
 </html>
