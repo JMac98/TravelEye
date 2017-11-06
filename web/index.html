@@ -30,9 +30,10 @@ and open the template in the editor.
 <!--        <p>hello</p>-->
 
         <script>
-            setInterval(getTime, 5000);
+            setInterval(getTime, 10000); // refresh every 10 seconds
 
             function getTime() {
+                $("#times").empty()
 
                 $.ajax({
                     type: 'GET',
@@ -45,8 +46,8 @@ and open the template in the editor.
 
                             var time = value.timeToStation;
                             var minutes = Math.floor(time / 60);
-
-                            $("#times").html(destination + " [------------------] " + minutes + " minutes" + "<br>");
+                            
+                            $("#times").append(destination + " [------------------] " + minutes + " minutes" + "<br>");
                             $("#stationName1").html(stationName);
                         });
                     }
