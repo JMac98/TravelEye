@@ -8,36 +8,46 @@ and open the template in the editor.
     <head>
         <title>TravelEye</title>
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
-        
-        <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
-        <link rel="stylesheet" href="https://code.getmdl.io/1.3.0/material.indigo-pink.min.css">
+
+        <link rel="stylesheet" type="text/css" href="style.css" />
+
         <script defer src="https://code.getmdl.io/1.3.0/material.min.js"></script>
 
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
+        <style>
+        </style>
+        
     </head>
 
-    <body>
-        <div id="times"></div>
-        <!-- Raised button with ripple -->
-        <button class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect" onclick="get_times()">
-            Button
-        </button>
+
+
+    <body onload="getTime()">
+        <div id="times" class="fixed"></div>
+        <div id="stationName1" class="fixed2"></div>
+        <div id="ui" class="box"></div>
+<!--        <p>hello</p>-->
 
         <script>
-            function get_times() {
+            setInterval(getTime, 5000);
+
+            function getTime() {
+
                 $.ajax({
                     type: 'GET',
-                    url: 'https://api.tfl.gov.uk/Line/DLR/Arrivals/940GZZDLPRE?direction=outbound&app_id=461641d9&app_key=da2878c05fb690b51e78be69a0fc691f',
+                    url: 'https://api.tfl.gov.uk/Line/dlr/Arrivals/940GZZDLPRE?destinationStationId=940GZZDLTWG&app_id=461641d9&app_key=da2878c05fb690b51e78be69a0fc691f',
                     dataType: 'json',
                     success: function (data) {
-                        $("#times").html("");
                         $.each(data, function (key, value) {
-                            var line = value.stationName;
+                            var stationName = value.stationName;
                             var destination = value.destinationName;
+
                             var time = value.timeToStation;
-                            $("#times").append(line + " -> " + destination + " " + time + "<br>");
+                            var minutes = Math.floor(time / 60);
+
+                            $("#times").html(destination + " [------------------] " + minutes + " minutes" + "<br>");
+                            $("#stationName1").html(stationName);
                         });
                     }
                 });
