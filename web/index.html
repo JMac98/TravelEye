@@ -19,19 +19,23 @@ and open the template in the editor.
     <body onload="getTime1(), getTime2()">
         <div id="dlrStationTitle" class="dlrStationTitlePosition"></div>
         <div id="dlrStationTime" class="dlrStationTimePosition"></div>
-        
-        <div class="dlrBox"></div>
+        <div id="dlrStatusTitle" class="dlrStatusTitlePosition"></div>
 
+        <div class="dlrBox"></div>
+        <div class="dlrStatusBox"></div>
+        
         <div id="northernLineStationTitle" class="northernLineStationTitlePosition"></div>
         <div id="northernLineStationTime1" class="northernLineStationTimePosition1"></div>
-        
-        <div class="northernLineBox"></div>
+       
+        <div class="northernLineBox"></div> 
         
         <script>
             setInterval(getTime1, 10000); // refresh every 10 seconds 
-            setInterval(getTime2, 10000); // refresh every 10 seconds
-            function getTime1() {
-                $("#dlrStationTime").empty()
+            setInterval(getTime2, 10000); 
+            setInterval(getDLRStatus, 50); 
+            
+            function getTime1(){
+                $("#dlrStationTime").empty();
 
                 $.ajax({
                     type: 'GET',
@@ -58,12 +62,11 @@ and open the template in the editor.
             }
             
             function getTime2() {
-                $("#northernLineStationTime1").empty()
+                $("#northernLineStationTime1").empty();
 
                 $.ajax({
                     type: 'GET',
-                    url: 'https://api.tfl.gov.uk/Line/northern/Arrivals/940GZZLUBNK?direction=outbound',
-                    //url: 'https://api.tfl.gov.uk/Line/northern/Arrivals/940GZZLUBNK?direction=outbound&destinationStationId=940GZZLUHBT', // only does towards high barnet
+                    url: 'https://api.tfl.gov.uk/Line/northern/Arrivals/940GZZLUBNK?direction=outbound',     
                     dataType: 'json',
                     success: function (data) {
                         var sorted = data.sort(function (a, b) {
@@ -72,8 +75,7 @@ and open the template in the editor.
                             }
                             if(a.timeToStation > b.timeToStation) {
                                 return -1;
-                            }
-                            
+                            }   
                             return 0;
                         });
 
@@ -83,23 +85,37 @@ and open the template in the editor.
                
                             var time = value.timeToStation;
                             time = parseInt(time / 60);
-                            time < 1 ? time = "Due" : time = time + " minutes"
+                            time < 1 ? time = "Due" : time = time + " minutes";
 
                             $("#northernLineStationTitle").html(stationName + " - " + "PLATFORM 4");
                             
-                            if(destination == "High Barnet Underground Station"){
+                            if(destination == "High Barnet Underground Station" || "Mill Hill East Underground Station"){
                                 $("#northernLineStationTime1").append(destination + " &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;" + time + "<br>");
                             }else{
                                 $("#northernLineStationTime1").append(destination + " &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;" + time + "<br>");
                             }
-
-                            
                         });
                     }
                 });
             }
+            
+       
+            function getDLRStatus() {
+                
+                $.ajax({
+                    type: 'GET',
+                    url: 'https://api.tfl.gov.uk/Line/Mode/dlr/Status?detail=true',
+                    dataType: 'json',
+                    success: function (data) {
+                        $.each(data, function (key, value) {
+                            var lineStatus = value.lineStatuses; //
 
-        </script>
-
+                            $("#dlrStatusTitle").html("Status" + " - " + "Good Service");
+                        });
+                    }
+                });
+            }
+            
+         </script>
     </body>
 </html>
