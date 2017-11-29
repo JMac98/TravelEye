@@ -11,29 +11,27 @@ and open the template in the editor.
 
         <link rel="stylesheet" type="text/css" href="style.css" />
 
-        <script defer src="https://code.getmdl.io/1.3.0/material.min.js"></script>
-
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-        <style>
-        </style>
-        
     </head>
 
+    <body onload="getTime1(), getTime2()">
+        <div id="dlrStationTitle" class="dlrStationTitlePosition"></div>
+        <div id="dlrStationTime" class="dlrStationTimePosition"></div>
+        
+        <div class="dlrBox"></div>
 
-
-    <body onload="getTime()">
-        <div id="times" class="fixed"></div>
-        <div id="stationName1" class="fixed2"></div>
-        <div id="ui" class="box"></div>
-<!--        <p>hello</p>-->
-
+        <div id="northernLineStationTitle" class="northernLineStationTitlePosition"></div>
+        <div id="northernLineStationTime1" class="northernLineStationTimePosition1"></div>
+        
+        <div class="northernLineBox"></div>
+        
         <script>
-            setInterval(getTime, 10000); // refresh every 10 seconds
-
-            function getTime() {
-                $("#times").empty()
+            setInterval(getTime1, 10000); // refresh every 10 seconds 
+            setInterval(getTime2, 10000); // refresh every 10 seconds
+            function getTime1() {
+                $("#dlrStationTime").empty()
 
                 $.ajax({
                     type: 'GET',
@@ -46,13 +44,61 @@ and open the template in the editor.
 
                             var time = value.timeToStation;
                             var minutes = Math.floor(time / 60);
-                            
-                            $("#times").append(destination + " [------------------] " + minutes + " minutes" + "<br>");
-                            $("#stationName1").html(stationName);
+
+                            $("#dlrStationTitle").html(stationName + " - " + "PLATFORM 4");
+
+                            if (minutes > 0) {
+                                $("#dlrStationTime").append(destination + " &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;" + minutes + " minutes" + "<br>");
+                            } else {
+                                $("#dlrStationTime").append(destination + " &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;" + "Due" + "<br>");
+                            }
                         });
                     }
                 });
             }
+            
+            function getTime2() {
+                $("#northernLineStationTime1").empty()
+
+                $.ajax({
+                    type: 'GET',
+                    url: 'https://api.tfl.gov.uk/Line/northern/Arrivals/940GZZLUBNK?direction=outbound',
+                    //url: 'https://api.tfl.gov.uk/Line/northern/Arrivals/940GZZLUBNK?direction=outbound&destinationStationId=940GZZLUHBT', // only does towards high barnet
+                    dataType: 'json',
+                    success: function (data) {
+                        var sorted = data.sort(function (a, b) {
+                            if(a.timeToStation > b.timeToStation) {
+                                return 1;
+                            }
+                            if(a.timeToStation > b.timeToStation) {
+                                return -1;
+                            }
+                            
+                            return 0;
+                        });
+
+                        $.each(data, function (key, value) {
+                            var stationName = value.stationName;
+                            var destination = value.destinationName;
+               
+                            var time = value.timeToStation;
+                            time = parseInt(time / 60);
+                            time < 1 ? time = "Due" : time = time + " minutes"
+
+                            $("#northernLineStationTitle").html(stationName + " - " + "PLATFORM 4");
+                            
+                            if(destination == "High Barnet Underground Station"){
+                                $("#northernLineStationTime1").append(destination + " &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;" + time + "<br>");
+                            }else{
+                                $("#northernLineStationTime1").append(destination + " &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;" + time + "<br>");
+                            }
+
+                            
+                        });
+                    }
+                });
+            }
+
         </script>
 
     </body>

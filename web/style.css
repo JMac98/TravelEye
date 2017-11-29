@@ -1,40 +1,61 @@
-/*
-To change this license header, choose License Headers in Project Properties.
-To change this template file, choose Tools | Templates
-and open the template in the editor.
-*/
-/* 
-    Created on : 06-Nov-2017, 16:43:23
-    Author     : JamesM
-*/
-
-.fixed {
-    position: fixed;
-    top: 250px;
-    right: 780px;
-    width: 550px;
-    font-family: Verdana;
-    font-size: 16px;
-}
-
-.fixed2 {
+.dlrStationTitlePosition {
     position: fixed;
     top: 220px;
-    right: 780px;
+    right: 720px;
     width: 550px;
     font-family: Verdana;
     font-size: 16px;
     font-weight: bold;
 }
 
-.box{
+.dlrStationTimePosition {
     position: fixed;
-    background:#536493;
+    top: 250px;
+    right: 720px;
+    width: 550px;
+    font-family: Verdana;
+    font-size: 16px;
+}
+
+.northernLineStationTitlePosition {
+    position: fixed;
+    top: 350px;
+    right: 720px;
+    width: 550px;
+    color: white; 
+    font-family: Verdana;
+    font-size: 16px;
+    font-weight: bold;
+}
+
+.northernLineStationTimePosition1 {
+    position: fixed;
+    top: 380px;
+    right: 720px;
+    width: 550px;
+    color: white; 
+    font-family: Verdana;
+    font-size: 16px;
+}
+
+.dlrBox{
+    position: fixed;
+    background:#0BA096;
     top: 200px;
-    right: 558px;
-    width:800px;
-    height:280px;
-    border:2px solid black;
+    right: 600px;
+    width:700px;
+    height:260px;
+    border:1px solid black;
     z-index: -1;
-    
+}
+
+.northernLineBox{
+    position: fixed;
+    background: black;
+    top: 330px;
+    right: 600px;
+    width: 700px;
+    height: 140px;
+    border:1px solid black;
+    z-index: -1;
 }
